@@ -67,10 +67,10 @@ def load_data(path, filename):
     @param filename: Filename of csv file with information about samples.
     @return: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
     """
-    entry_list = pandas.read_csv(os.path.join(path, filename))
+    entry_list = pandas.read_csv(os.path.join(path, filename)) # Tutaj read_xml,  os.path.join tworzy sciezke do pliku
 
     data = []
-    for idx, entry in entry_list.iterrows():
+    for idx, entry in entry_list.iterrows(): #iterrows iteruje po wierszach
         class_id = class_id_to_new_class_id[entry['ClassId']]
         image_path = entry['Path']
 
