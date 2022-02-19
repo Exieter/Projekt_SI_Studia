@@ -32,7 +32,7 @@ def load_data_test(path, filename):
         for name in root.iter('name'):
             name.text
             if name.text == 'crosswalk':
-                data.append({'image': image, 'label': name.text})
+                data.append({'image': image, 'label': 1})
     return data
 
 
@@ -62,7 +62,7 @@ def load_data_train(path, filename):
             name.text
             #data.append({'image': image, 'label': name.text})
             if name.text == 'crosswalk':
-                data.append({'image': image, 'label': name.text})
+                data.append({'image': image, 'label': 1})
 
     return data
 
@@ -73,7 +73,7 @@ def learn_bovw(data):
     @param data: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
     @return: Nothing
     """
-    dict_size = 1000
+    dict_size = 8
     bow = cv2.BOWKMeansTrainer(dict_size)
 
     sift = cv2.SIFT_create()
@@ -179,7 +179,8 @@ def predict(rf, data):
     for idx, sample in enumerate(data):
         if sample['desc'] is not None:
             pred = rf.predict(sample['desc'])
-            sample['label_pred'] = str(pred)
+            sample['label_pred'] = int(pred)
+            print('pred: ', pred)
     return data
 
 
