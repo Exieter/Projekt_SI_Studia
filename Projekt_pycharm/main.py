@@ -18,6 +18,7 @@ def load_data_test(path, filename):
     @param filename: Filename of csv file with information about samples.
     @return: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
     """
+
     entry_list_csv = pandas.read_csv(os.path.join(path, filename))
 
     data = []
@@ -33,6 +34,10 @@ def load_data_test(path, filename):
             name.text
             if name.text == 'crosswalk':
                 data.append({'image': image, 'label': 1})
+            elif name.text != 'crosswalk':
+                data.append({'image': image, 'label': 0})
+
+
     return data
 
 
@@ -73,7 +78,7 @@ def learn_bovw(data):
     @param data: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
     @return: Nothing
     """
-    dict_size = 8
+    dict_size = 128
     bow = cv2.BOWKMeansTrainer(dict_size)
 
     sift = cv2.SIFT_create()
@@ -180,7 +185,7 @@ def predict(rf, data):
         if sample['desc'] is not None:
             pred = rf.predict(sample['desc'])
             sample['label_pred'] = int(pred)
-            print('pred: ', pred)
+            
     return data
 
 
