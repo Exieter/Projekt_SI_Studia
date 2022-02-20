@@ -185,7 +185,7 @@ def predict(rf, data):
         if sample['desc'] is not None:
             pred = rf.predict(sample['desc'])
             sample['label_pred'] = int(pred)
-            
+
     return data
 
 
@@ -335,6 +335,7 @@ def main():
     display(data_test)
 
     return
+
 
 
 if __name__ == '__main__':
