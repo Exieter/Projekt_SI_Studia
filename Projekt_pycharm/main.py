@@ -25,7 +25,7 @@ def load_data_test(path, filename):
 
     data = []
     for idx, entry in entry_list_csv.iterrows():
-        image_path ='Train/images/' + entry['Path'] + '.png'
+        image_path ='Test/images/' + entry['Path'] + '.png'
         image = cv2.imread(os.path.join(path, image_path))
 
 
@@ -144,7 +144,7 @@ def train(data):
     return rf
 
 
-def predict(rf, data, data2):
+def predict(rf, data):
     """
     Predicts labels given a model and saves them as "label_pred" (int) entry for each sample.
     @param rf: Trained model.
@@ -193,7 +193,7 @@ def main():
 
 
     #print('learning BoVW')
-    #learn_bovw(data_train)
+    learn_bovw(data_train)
 
     #print('extracting train features')
     data_train = extract_features(data_train)
@@ -203,10 +203,10 @@ def main():
     rf = train(data_train)
 
     #print('extracting test features')
-    data_test2 = extract_features(data_test)
+    data_test = extract_features(data_test)
 
     #print('testing on testing dataset')
-    data_test = predict(rf, data_test2, data_test)
+    data_test = predict(rf, data_test)
     return
 
 
