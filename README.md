@@ -11,3 +11,19 @@ load_data_train
 
 learn_bovw
    Funkcja do nauki słownika BoVW, który zapisywany jest w pliku  "voc.npy".
+  
+  
+extract_features
+  Funkcja odpowiedzialna za ekstrakcję cech i oznaczająca je jako 'desc'
+  
+  
+train
+  Funkcja odpowiadająca za wytrenowanie wykorzystująca klasyfikację Random Forest
+  
+  
+predict
+  Funkcja do wykrywanie czy dane wejściowe są znakami przejścia dla pieszych czy nie na podstawie wcześniej wyuczonego modelu. Dodatkowo funkcja posiada wyświetlanie nazwy pliku   testowego oraz (prawdopodobnie)  zakomentowane działające wyświetlanie ilości znaków przejść dla pieszych na zdjęciu oraz wyświetlanie współrzędnych prostokąta w którym się     znajduje pierwszy wykryty znak - do ich działania potrzebna jest biblioteka cvlib oraz zainstalowana tensorflow. W przypadku tej 2 występował u mnie błąd w postaci zbyt     długiej  ścieżki, mimo próby rozwiązania problemu drogą wskazaną innym posiadaczą tego problemu na forach nie udało mi się rozwiązać z tego powodu nie byłem w stanie  zweryfikować czy owe   zakomentowane rozwiązanie jest prawidłowe.
+  
+  
+ balance_dataset
+  Zwraca znormalizowane dane
