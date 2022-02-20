@@ -2,6 +2,8 @@ import os
 import random
 import numpy as np
 import cv2
+#import cvlib as cv # COMMONCOUNT
+
 
 from sklearn.ensemble import RandomForestClassifier
 import pandas
@@ -33,9 +35,9 @@ def load_data_test(path, filename):
         for name in root.iter('name'):
             name.text
             if name.text == 'crosswalk':
-                data.append({'image': image, 'label': 1})
+                data.append({'image': image, 'label': 1, 'name': entry['Path'] +'.png'})
             elif name.text != 'crosswalk':
-                data.append({'image': image, 'label': 0})
+                data.append({'image': image, 'label': 0, 'name': entry['Path'] +'.png'})
 
 
     return data
@@ -65,7 +67,6 @@ def load_data_train(path, filename):
         root = tree.getroot()
         for name in root.iter('name'):
             name.text
-            #data.append({'image': image, 'label': name.text})
             if name.text == 'crosswalk':
                 data.append({'image': image, 'label': 1})
 
@@ -170,7 +171,7 @@ def draw_grid(images, n_classes, grid_size, h, w):
     return image_all
 
 
-def predict(rf, data):
+def predict(rf, data, data2):
     """
     Predicts labels given a model and saves them as "label_pred" (int) entry for each sample.
     @param rf: Trained model.
@@ -185,6 +186,13 @@ def predict(rf, data):
         if sample['desc'] is not None:
             pred = rf.predict(sample['desc'])
             sample['label_pred'] = int(pred)
+
+
+            print(sample['name'])
+
+            box, label, count = cv.detect_common_objects(sample['image'])
+            print(count)
+            print('box:', box)
 
     return data
 
@@ -316,8 +324,8 @@ def main():
     print('test dataset after balancing:')
     display_dataset_stats(data_test)
 
-    print('learning BoVW')
-    learn_bovw(data_train)
+    #print('learning BoVW')
+    #learn_bovw(data_train)
 
     print('extracting train features')
     data_train = extract_features(data_train)
@@ -327,12 +335,12 @@ def main():
     rf = train(data_train)
 
     print('extracting test features')
-    data_test = extract_features(data_test)
+    data_test2 = extract_features(data_test)
 
     print('testing on testing dataset')
-    data_test = predict(rf, data_test)
-    evaluate(data_test)
-    display(data_test)
+    data_test = predict(rf, data_test2, data_test)
+    evaluate(data_test2)
+    display(data_test2)
 
     return
 
