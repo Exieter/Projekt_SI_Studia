@@ -14,12 +14,6 @@ from sklearn.metrics import confusion_matrix
 import xml.etree.ElementTree as ET #biblioteka do czytania .xml
 
 def load_data_test(path, filename):
-    """
-    Loads data from disk.
-    @param path: Path to dataset directory.
-    @param filename: Filename of csv file with information about samples.
-    @return: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
-    """
 
     entry_list_csv = pandas.read_csv(os.path.join(path, filename))
 
@@ -47,12 +41,7 @@ def load_data_test(path, filename):
 
 
 def load_data_train(path, filename):
-    """
-    Loads data from disk.
-    @param path: Path to dataset directory.
-    @param filename: Filename of csv file with information about samples.
-    @return: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
-    """
+
     entry_list_csv = pandas.read_csv(os.path.join(path, filename))
 
     data = []
@@ -74,11 +63,6 @@ def load_data_train(path, filename):
 
 
 def learn_bovw(data):
-    """
-    Learns BoVW dictionary and saves it as "voc.npy" file.
-    @param data: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
-    @return: Nothing
-    """
     dict_size = 128
     bow = cv2.BOWKMeansTrainer(dict_size)
 
@@ -96,19 +80,12 @@ def learn_bovw(data):
 
 
 def extract_features(data):
-    """
-    Extracts features for given data and saves it as "desc" entry.
-    @param data: List of dictionaries, one for every sample, with entries "image" (np.array with image) and "label" (class_id).
-    @return: Data with added descriptors for each sample.
-    """
     sift = cv2.SIFT_create()
     flann = cv2.FlannBasedMatcher_create()
     bow = cv2.BOWImgDescriptorExtractor(sift, flann)
     vocabulary = np.load('voc.npy')
     bow.setVocabulary(vocabulary)
     for sample in data:
-        # compute descriptor and add it as "desc" entry in sample
-        # TODO PUT YOUR CODE HERE
         kpts = sift.detect(sample['image'], None)
         desc = bow.compute(sample['image'], kpts)
         sample['desc'] = desc
@@ -119,15 +96,7 @@ def extract_features(data):
 
 
 def train(data):
-    """
-    Trains Random Forest classifier. #jak to zaimplementowac to random forest
-    #https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
-    @param data: List of dictionaries, one for every sample, with entries "image" (np.array with image), "label" (class_id),
-                    "desc" (np.array with descriptor).
-    @return: Trained model.
-    """
     # train random forest model and return it from function.
-    # TODO PUT YOUR CODE HERE
 
     descs = []
     labels = []
@@ -153,7 +122,7 @@ def predict(rf, data):
     @return: Data with added predicted labels for each sample.
     """
     # perform prediction using trained model and add results as "label_pred" (int) entry in sample
-    # TODO PUT YOUR CODE HERE
+
 
     for idx, sample in enumerate(data):
         if sample['desc'] is not None:
@@ -174,12 +143,7 @@ def predict(rf, data):
 
 
 def balance_dataset(data, ratio):
-    """
-    Subsamples dataset according to ratio.
-    @param data: List of samples.
-    @param ratio: Ratio of samples to be returned.
-    @return: Subsampled dataset.
-    """
+
     sampled_data = random.sample(data, int(ratio * len(data)))
 
     return sampled_data
